@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenWrt 流量监控</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial; margin: 40px; background: #f0f2f5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; }
+        h1 { color: #1a73e8; }
+        .data { background: #e8f0fe; padding: 15px; border-radius: 8px; font-family: monospace; }
+        button { padding: 10px 20px; background: #1a73e8; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenWrt 网络流量监控</h1>
+        <div class="data" id="traffic">加载中...</div>
+        <br>
+        <button onclick="loadData()">刷新数据</button>
+        <p id="time"></p>
+    </div>
+    <script>
+        function loadData() {
+            fetch('/cgi-bin/traffic.sh')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('traffic').innerHTML = '<pre>' + data + '</pre>';
+                    document.getElementById('time').innerHTML = '更新时间: ' + new Date().toLocaleString();
+                });
+        }
+        loadData();
+        setInterval(loadData, 3000);
+    </script>
+</body>
+</html>
